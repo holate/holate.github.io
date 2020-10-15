@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>@Mapper和@Repository的区别</title>
+    <url>/Java/2020/2020092701/</url>
+    <content><![CDATA[<p>JAVA中Dao层@Mapper和@Repository的区别</p>
+<a id="more"></a>
+
+<h1 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h1><p>@Mapper注解是mybatis的注解，是用来说明这个是一个Mapper，对应的xxxMapper.xml就是来实现这个Mapper。然后再server层使用@Autowired注解引用进来，会出现这样的情况，但是并不影响使用。 </p>
+<p>这是因为@Autowired是spring的注解，提示找不到相应的bean。如果有强迫症的同学，可以使用@Resource注解，因为这个是JDK的注解。</p>
+<h1 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h1><p>@Repository注解是Spring的注解，使用该注解和@Autowired注解，就不会出现爆红的情况了，原因很简单，因为@Repository注解是Sring的注解，把当前类注册成一个bean了。</p>
+<p>这里的@Mapper也是可以去掉的，但是要在启动类上加上<br>@MapperScan(value = {“{package_name}.*.mapper”})</p>
+<p>这句话的意思是扫描Mapper类。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HttpLogFilter拦截所有Http请求打印日志</title>
+    <url>/Java/2020/2020100901/</url>
+    <content><![CDATA[<p>JAVA使用HttpLogFilter拦截所有Http请求并打印日志</p>
+<a id="more"></a>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><ol>
+<li>使用lombok注解<code>@Log4j2</code>完成log注入</li>
+<li>拦截所有HTTP请求</li>
+<li>打印内容为header、url、parameter、body、method</li>
+</ol>
+<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@WebFilter(urlPatterns = &quot;/*&quot;, filterName = &quot;HttpLogFilter&quot;)</span></span><br><span class="line"><span class="meta">@Log4j2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpLogFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> </span>&#123;</span><br><span class="line">        HttpServletRequest req = (HttpServletRequest) request;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            CustomRequestWrapper customRequestWrapper = <span class="keyword">new</span> CustomRequestWrapper(req);</span><br><span class="line">            <span class="comment">//获取headers</span></span><br><span class="line">            Map&lt;String, String&gt; headers = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            Enumeration&lt;?&gt; headerNames = req.getHeaderNames();</span><br><span class="line">            <span class="keyword">while</span> (headerNames.hasMoreElements()) &#123;</span><br><span class="line">                String key = (String) headerNames.nextElement();</span><br><span class="line">                String value = req.getHeader(key);</span><br><span class="line">                headers.put(key, value);</span><br><span class="line">            &#125;</span><br><span class="line">            String builder = <span class="string">&quot;\nHeaders:&quot;</span> + JSON.toJSONString(headers) + <span class="string">&quot;,&quot;</span> +</span><br><span class="line">                <span class="comment">//获取请求地址</span></span><br><span class="line">                <span class="string">&quot;\nURL:&quot;</span> + req.getRequestURI() + <span class="string">&quot;,&quot;</span> +</span><br><span class="line">                <span class="comment">//获取方法名</span></span><br><span class="line">                <span class="string">&quot;\nMethod:&quot;</span> + req.getMethod() + <span class="string">&quot;,&quot;</span> +</span><br><span class="line">                <span class="comment">//获取parameter内容</span></span><br><span class="line">                <span class="string">&quot;\nParameters:&quot;</span> + JSON.toJSONString(req.getParameterMap()) + <span class="string">&quot;,&quot;</span> +</span><br><span class="line">                <span class="comment">//获取body内容</span></span><br><span class="line">                <span class="string">&quot;\nBody:&quot;</span> + customRequestWrapper.getRequestBody();</span><br><span class="line">            log.info(builder);</span><br><span class="line">            chain.doFilter(customRequestWrapper, response);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(e.getMessage(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomRequestWrapper</span> <span class="keyword">extends</span> <span class="title">HttpServletRequestWrapper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] requestBody;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomRequestWrapper</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(request);</span><br><span class="line">        requestBody = HttpRequestUtil.getRequestBody(request).getBytes();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getRequestBody</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(requestBody);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServletInputStream <span class="title">getInputStream</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ByteArrayInputStream byteArrayInputStream = <span class="keyword">new</span> ByteArrayInputStream(requestBody);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ServletInputStream() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFinished</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isReady</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setReadListener</span><span class="params">(ReadListener readListener)</span> </span>&#123;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> byteArrayInputStream.read();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BufferedReader <span class="title">getReader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(getInputStream()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpRequestUtil</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getRequestBody</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">try</span> (ServletInputStream servletInputStream = request.getInputStream()) &#123;</span><br><span class="line">            String line;</span><br><span class="line">            BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(servletInputStream));</span><br><span class="line">            <span class="keyword">while</span> ((line = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                builder.append(line.trim());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> builder.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Filter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Android开启adb远程调试</title>
+    <url>/Android/2020/2020101301/</url>
+    <content><![CDATA[<p>Android开启adb远程调试：先用数据线连接方式</p>
+<a id="more"></a>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
+<li>手机电脑需要在同一网络下</li>
+<li>数据线</li>
+</ol>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><ol>
+<li>开启开发者模式</li>
+<li>用数据线连接电脑</li>
+<li><code>adb tcpip 5555</code></li>
+<li>断开数据线</li>
+<li><code>adb connect ip</code>端口默认<code>5555</code></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>adb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在idea使用@Autowired报警告Field injection is not recommended</title>
+    <url>/Java/2020/2020101401/</url>
+    <content><![CDATA[<p>在idea使用@Autowired报警告Field injection is not recommended解决方式</p>
+<a id="more"></a>
+
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>在idea钟使用<code>@Autowired</code>注解时，会报警告<code>Field injection is not recommended</code>。这对于部分人是难以忍受的，毕竟下面黄色波浪线飘着。</p>
+<h1 id="😕为什么会有警告"><a href="#😕为什么会有警告" class="headerlink" title="😕为什么会有警告"></a>😕为什么会有警告</h1><p>Spring在<a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-setter-injection">文档</a>里这么说：</p>
+<blockquote>
+<p>The Spring team generally advocates constructor injection, as it lets you implement application components as immutable objects and ensures that required dependencies are not <code>null</code>. Furthermore, constructor-injected components are always returned to the client (calling) code in a fully initialized state.</p>
+</blockquote>
+<p>Google翻译如下：</p>
+<blockquote>
+<p>Spring团队通常提倡构造函数注入，因为它使您可以将应用程序组件实现为不可变对象，并确保所需的依赖项不为<code>null</code>。此外，注入构造函数的组件始终以完全初始化的状态返回到客户端（调用）代码。</p>
+</blockquote>
+<p>下面来简单的解释一下：</p>
+<ul>
+<li><p>依赖不可变：其实说的就是final关键字。</p>
+</li>
+<li><p>依赖不为空（省去了我们对其检查）：当要实例化Controller的时候，由于自己实现了有参数的构造函数，所以不会调用默认构造函数，那么就需要Spring容器传入所需要的参数，所以就两种情况：</p>
+<p>1、有该类型的参数-&gt;传入，OK 。</p>
+<p>2：无该类型的参数-&gt;报错。</p>
+<p>所以保证不会为空</p>
+</li>
+<li><p>完全初始化的状态：这个可以跟上面的依赖不为空结合起来，向构造器传参之前，要确保注入的内容不为空，那么肯定要调用依赖组件的构造方法完成实例化。而在Java类加载实例化的过程中，构造方法是最后一步（之前如果有父类先初始化父类，然后自己的成员变量，最后才是构造方法，这里不详细展开）。所以返回来的都是初始化之后的状态。</p>
+</li>
+</ul>
+<p>我的未解决的疑问：为什么其他方式会存在问题？只是知道不推荐使用其他方式。</p>
+<h1 id="🤓怎么解决"><a href="#🤓怎么解决" class="headerlink" title="🤓怎么解决"></a>🤓怎么解决</h1><h2 id="1-⭐使用推荐方式：构造函数注入"><a href="#1-⭐使用推荐方式：构造函数注入" class="headerlink" title="1.⭐使用推荐方式：构造函数注入"></a>1.⭐使用推荐方式：构造函数注入</h2><p>   示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FooController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> FooService fooService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FooController</span><span class="params">(FooService fooService)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fooService = fooService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   可见在有多个注入时需要多个参数。</p>
+<h2 id="2-⭐使用lombok注解"><a href="#2-⭐使用lombok注解" class="headerlink" title="2.⭐使用lombok注解"></a>2.⭐使用lombok注解</h2><p>   示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor(onConstructor = @__(@Autowired))</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FooController</span> </span>&#123;</span><br><span class="line">  <span class="comment">//这里必须是final,若不使用final,用@NonNull注解也是可以的</span></span><br><span class="line">  <span class="comment">//不过单独使用@NonNull注解会报警告Field &#x27;xxx&#x27; may be &#x27;final&#x27; </span></span><br><span class="line">  <span class="comment">//这与我们初衷违背</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> FooService fooService;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>lombok注解会自动生成构造函数并加上@Autowired注解</p>
+<h2 id="3-⭐使用-Resource注解"><a href="#3-⭐使用-Resource注解" class="headerlink" title="3.⭐使用@Resource注解"></a>3.⭐使用@Resource注解</h2><p>   目前自己在开发中没遇到任何问题，等自己再学习学习。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://www.cnblogs.com/joemsu/p/7688307.html">浅谈spring为什么推荐使用构造器注入 - joemsu - 博客园</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Java</tag>
+        <tag>CodeStyle</tag>
+      </tags>
+  </entry>
+</search>
