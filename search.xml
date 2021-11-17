@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>@Mapper和@Repository的区别</title>
+    <url>/JAVA/2020/2020092701/</url>
+    <content><![CDATA[<p>JAVA中Dao层@Mapper和@Repository的区别</p>
+<a id="more"></a>
+
+<h1 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h1><p>@Mapper注解是mybatis的注解，是用来说明这个是一个Mapper，对应的xxxMapper.xml就是来实现这个Mapper。然后再server层使用@Autowired注解引用进来，会出现这样的情况，但是并不影响使用。 </p>
+<p>这是因为@Autowired是spring的注解，提示找不到相应的bean。如果有强迫症的同学，可以使用@Resource注解，因为这个是JDK的注解。</p>
+<h1 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h1><p>@Repository注解是Spring的注解，使用该注解和@Autowired注解，就不会出现爆红的情况了，原因很简单，因为@Repository注解是Sring的注解，把当前类注册成一个bean了。</p>
+<p>这里的@Mapper也是可以去掉的，但是要在启动类上加上<br>@MapperScan(value = {“{package_name}.*.mapper”})</p>
+<p>这句话的意思是扫描Mapper类。</p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HttpLogFilter拦截所有Http请求打印日志</title>
     <url>/JAVA/2020/2020100901/</url>
     <content><![CDATA[<p>JAVA使用HttpLogFilter拦截所有Http请求并打印日志</p>
@@ -46,28 +66,8 @@
       </tags>
   </entry>
   <entry>
-    <title>@Mapper和@Repository的区别</title>
-    <url>/JAVA/2020/2020092701/</url>
-    <content><![CDATA[<p>JAVA中Dao层@Mapper和@Repository的区别</p>
-<a id="more"></a>
-
-<h1 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h1><p>@Mapper注解是mybatis的注解，是用来说明这个是一个Mapper，对应的xxxMapper.xml就是来实现这个Mapper。然后再server层使用@Autowired注解引用进来，会出现这样的情况，但是并不影响使用。 </p>
-<p>这是因为@Autowired是spring的注解，提示找不到相应的bean。如果有强迫症的同学，可以使用@Resource注解，因为这个是JDK的注解。</p>
-<h1 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h1><p>@Repository注解是Spring的注解，使用该注解和@Autowired注解，就不会出现爆红的情况了，原因很简单，因为@Repository注解是Sring的注解，把当前类注册成一个bean了。</p>
-<p>这里的@Mapper也是可以去掉的，但是要在启动类上加上<br>@MapperScan(value = {“{package_name}.*.mapper”})</p>
-<p>这句话的意思是扫描Mapper类。</p>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Mybatis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MapStruct嵌套对象的复制</title>
-    <url>/JAVA/2020/2021111701/</url>
+    <url>/JAVA/2021/2021111701/</url>
     <content><![CDATA[<p>MapStruct嵌套对象的复制</p>
 <a id="more"></a>
 
