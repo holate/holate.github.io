@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>JAVA常用的单例模式</title>
-    <url>/JAVA/2021111702/</url>
-    <content><![CDATA[<p>JAVA常用的单例模式 饿汉式、双检查锁、静态内部类、枚举</p>
-<a id="more"></a>
-
-<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="1-饿汉式"><a href="#1-饿汉式" class="headerlink" title="1. 饿汉式"></a>1. 饿汉式</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTon</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> SingleTon INSTANCE = <span class="keyword">new</span> SingleTon();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTon</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTon <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTon&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-双检锁（懒汉式）"><a href="#2-双检锁（懒汉式）" class="headerlink" title="2. 双检锁（懒汉式）"></a>2. 双检锁（懒汉式）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonDCL</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingleTonDCL singleton;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonDCL</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonDCL <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingleTonDCL.class) &#123;</span><br><span class="line">                <span class="comment">// 注意此处还得有次判空</span></span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> SingleTonDCL();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonDCL&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-静态内部类（懒汉式）"><a href="#3-静态内部类（懒汉式）" class="headerlink" title="3. 静态内部类（懒汉式）"></a>3. 静态内部类（懒汉式）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonInnerClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonInnerClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonInnerClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingleTonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> SingleTonInnerClass INSTANCE = <span class="keyword">new</span> SingleTonInnerClass();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonInnerClass&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-枚举模式（-）"><a href="#4-枚举模式（-）" class="headerlink" title="4. 枚举模式（-）"></a>4. 枚举模式（-）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SingleTonEnum</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * SingleTonEnum</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonEnum&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://cloud.tencent.com/developer/article/1497592">Java单例模式的7种写法中，为何用Enum枚举实现被认为是最好的方式？</a></p>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>单例模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MapStruct嵌套对象的复制</title>
     <url>/JAVA/2021/2021111701/</url>
     <content><![CDATA[<p>MapStruct嵌套对象的复制</p>
@@ -71,6 +48,32 @@
       </tags>
   </entry>
   <entry>
+    <title>Android开启adb远程调试</title>
+    <url>/Android/2020/2020101301/</url>
+    <content><![CDATA[<p>Android开启adb远程调试：先用数据线连接方式</p>
+<a id="more"></a>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
+<li>手机电脑需要在同一网络下</li>
+<li>数据线</li>
+</ol>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><ol>
+<li>开启开发者模式</li>
+<li>用数据线连接电脑</li>
+<li><code>adb tcpip 5555</code></li>
+<li>断开数据线</li>
+<li><code>adb connect ip</code>端口默认<code>5555</code></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>adb</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HttpLogFilter拦截所有Http请求打印日志</title>
     <url>/JAVA/2020/2020100901/</url>
     <content><![CDATA[<p>JAVA使用HttpLogFilter拦截所有Http请求并打印日志</p>
@@ -110,29 +113,63 @@
       </tags>
   </entry>
   <entry>
-    <title>Android开启adb远程调试</title>
-    <url>/Android/2020/2020101301/</url>
-    <content><![CDATA[<p>Android开启adb远程调试：先用数据线连接方式</p>
+    <title>JAVA常用的单例模式</title>
+    <url>/JAVA/2021/2021111702/</url>
+    <content><![CDATA[<p>JAVA常用的单例模式 饿汉式、双检查锁、静态内部类、枚举</p>
 <a id="more"></a>
 
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
-<li>手机电脑需要在同一网络下</li>
-<li>数据线</li>
-</ol>
-<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><ol>
-<li>开启开发者模式</li>
-<li>用数据线连接电脑</li>
-<li><code>adb tcpip 5555</code></li>
-<li>断开数据线</li>
-<li><code>adb connect ip</code>端口默认<code>5555</code></li>
-</ol>
+<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="1-饿汉式"><a href="#1-饿汉式" class="headerlink" title="1. 饿汉式"></a>1. 饿汉式</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTon</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> SingleTon INSTANCE = <span class="keyword">new</span> SingleTon();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTon</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTon <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTon&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-双检锁（懒汉式）"><a href="#2-双检锁（懒汉式）" class="headerlink" title="2. 双检锁（懒汉式）"></a>2. 双检锁（懒汉式）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonDCL</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingleTonDCL singleton;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonDCL</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonDCL <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingleTonDCL.class) &#123;</span><br><span class="line">                <span class="comment">// 注意此处还得有次判空</span></span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> SingleTonDCL();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonDCL&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-静态内部类（懒汉式）"><a href="#3-静态内部类（懒汉式）" class="headerlink" title="3. 静态内部类（懒汉式）"></a>3. 静态内部类（懒汉式）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonInnerClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonInnerClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonInnerClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingleTonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> SingleTonInnerClass INSTANCE = <span class="keyword">new</span> SingleTonInnerClass();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonInnerClass&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-枚举模式（-）"><a href="#4-枚举模式（-）" class="headerlink" title="4. 枚举模式（-）"></a>4. 枚举模式（-）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SingleTonEnum</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * SingleTonEnum</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SingleTonEnum&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://cloud.tencent.com/developer/article/1497592">Java单例模式的7种写法中，为何用Enum枚举实现被认为是最好的方式？</a></p>
 ]]></content>
       <categories>
-        <category>Android</category>
+        <category>JAVA</category>
       </categories>
       <tags>
-        <tag>Android</tag>
-        <tag>adb</tag>
+        <tag>单例模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用工具校验 JSON 格式</title>
+    <url>/JAVA/2021/2021120201/</url>
+    <content><![CDATA[<p>使用工具校验 JSON 格式。</p>
+<a id="more"></a>
+
+<h1 id="使用工具校验-JSON-格式"><a href="#使用工具校验-JSON-格式" class="headerlink" title="使用工具校验 JSON 格式"></a>使用工具校验 JSON 格式</h1><p>使用的 dependency 版本为</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.78<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.code.gson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>gson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-databind<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>源码为</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;&#123;name:\&quot;张三\&quot;&#125;&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;&#123;\&quot;name:\&quot;张三\&quot;&#125;&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;&#123;name\&quot;:\&quot;张三\&quot;&#125;&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;&#123;\&quot;name\&quot;:\&quot;张三\&quot;&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : list) &#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">            System.out.println(<span class="string">&quot;fastJsonValid1(s) = &quot;</span> + fastJsonValid1(s));</span><br><span class="line">            System.out.println(<span class="string">&quot;fastJsonValid2(s) = &quot;</span> + fastJsonValid2(s));</span><br><span class="line">            System.out.println(<span class="string">&quot;jacksonValid(s) = &quot;</span> + jacksonValid(s));</span><br><span class="line">            System.out.println(<span class="string">&quot;gsonValid(s) = &quot;</span> + gsonValid(s));</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">fastJsonValid1</span><span class="params">(String test)</span> </span>&#123;</span><br><span class="line">        JSONValidator from = JSONValidator.from(test);</span><br><span class="line">        <span class="keyword">return</span> from.validate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">fastJsonValid2</span><span class="params">(String test)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            JSON.parse(test);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">jacksonValid</span><span class="params">(String jsonInString)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">final</span> ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">            mapper.readTree(jsonInString);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">gsonValid</span><span class="params">(String jsonInString)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> Gson().fromJson(jsonInString, Object.class);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (JsonSyntaxException ex) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;name:&quot;张三&quot;&#125;</span><br><span class="line">fastJsonValid1(s) &#x3D; false</span><br><span class="line">fastJsonValid2(s) &#x3D; true</span><br><span class="line">jacksonValid(s) &#x3D; false</span><br><span class="line">gsonValid(s) &#x3D; true</span><br><span class="line"></span><br><span class="line">&#123;&quot;name:&quot;张三&quot;&#125;</span><br><span class="line">fastJsonValid1(s) &#x3D; false</span><br><span class="line">fastJsonValid2(s) &#x3D; false</span><br><span class="line">jacksonValid(s) &#x3D; false</span><br><span class="line">gsonValid(s) &#x3D; false</span><br><span class="line"></span><br><span class="line">&#123;name&quot;:&quot;张三&quot;&#125;</span><br><span class="line">fastJsonValid1(s) &#x3D; false</span><br><span class="line">fastJsonValid2(s) &#x3D; false</span><br><span class="line">jacksonValid(s) &#x3D; false</span><br><span class="line">gsonValid(s) &#x3D; true</span><br><span class="line"></span><br><span class="line">&#123;&quot;name&quot;:&quot;张三&quot;&#125;</span><br><span class="line">fastJsonValid1(s) &#x3D; true</span><br><span class="line">fastJsonValid2(s) &#x3D; true</span><br><span class="line">jacksonValid(s) &#x3D; true</span><br><span class="line">gsonValid(s) &#x3D; true</span><br></pre></td></tr></table></figure>
+
+<p>通过返回值我们可以看到两个问题</p>
+<ol>
+<li>Gson 可以允许 KEY 值不以双引号开头</li>
+<li>FastJson 的 JSONValidator 和 parse 结果不同，parse 允许 key 值不用双引号包裹。</li>
+</ol>
+<h1 id="Gson-转换错误格式-JSON"><a href="#Gson-转换错误格式-JSON" class="headerlink" title="Gson 转换错误格式 JSON"></a>Gson 转换错误格式 JSON</h1><p>在使用 Gson 的时候发现如下一个情况</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;name&quot;: &quot;zhangsan&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>这么一个错误格式的 JSON 在 Postman 中能被识别到并且标红。<br>但是作为参数却能正常发送到后台并且不报错。后台使用的 String 接收，并由 Gson 转义。<br>转换结果为：</p>
+<p><code>com.google.gson.stream.JsonReader</code>类中<code>PEEKED_UNQUOTED_NAME</code>允许key值不使用双引号。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;name: &quot;zhangsan&quot;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;name&quot;: &quot;zhangsan&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>都被认为是合法的。<br>如果双引号只出现在前面被认为为非法。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;&quot;name: &quot;zhangsan&quot;&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>Gson</tag>
+        <tag>FastJson</tag>
       </tags>
   </entry>
 </search>
