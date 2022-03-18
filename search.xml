@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Android开启adb远程调试</title>
+    <url>/Android/2020/2020101301/</url>
+    <content><![CDATA[<p>Android开启adb远程调试：先用数据线连接方式</p>
+<a id="more"></a>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
+<li>手机电脑需要在同一网络下</li>
+<li>数据线</li>
+</ol>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><ol>
+<li>开启开发者模式</li>
+<li>用数据线连接电脑</li>
+<li><code>adb tcpip 5555</code></li>
+<li>断开数据线</li>
+<li><code>adb connect ip</code>端口默认<code>5555</code></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>adb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>@Mapper和@Repository的区别</title>
+    <url>/JAVA/2020/2020092701/</url>
+    <content><![CDATA[<p>JAVA中Dao层@Mapper和@Repository的区别</p>
+<a id="more"></a>
+
+<h1 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h1><p>@Mapper注解是mybatis的注解，是用来说明这个是一个Mapper，对应的xxxMapper.xml就是来实现这个Mapper。然后再server层使用@Autowired注解引用进来，会出现这样的情况，但是并不影响使用。 </p>
+<p>这是因为@Autowired是spring的注解，提示找不到相应的bean。如果有强迫症的同学，可以使用@Resource注解，因为这个是JDK的注解。</p>
+<h1 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h1><p>@Repository注解是Spring的注解，使用该注解和@Autowired注解，就不会出现爆红的情况了，原因很简单，因为@Repository注解是Sring的注解，把当前类注册成一个bean了。</p>
+<p>这里的@Mapper也是可以去掉的，但是要在启动类上加上<br>@MapperScan(value = {“{package_name}.*.mapper”})</p>
+<p>这句话的意思是扫描Mapper类。</p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MapStruct嵌套对象的复制</title>
     <url>/JAVA/2021/2021111701/</url>
     <content><![CDATA[<p>MapStruct嵌套对象的复制</p>
@@ -48,32 +94,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Android开启adb远程调试</title>
-    <url>/Android/2020/2020101301/</url>
-    <content><![CDATA[<p>Android开启adb远程调试：先用数据线连接方式</p>
-<a id="more"></a>
-
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
-<li>手机电脑需要在同一网络下</li>
-<li>数据线</li>
-</ol>
-<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><ol>
-<li>开启开发者模式</li>
-<li>用数据线连接电脑</li>
-<li><code>adb tcpip 5555</code></li>
-<li>断开数据线</li>
-<li><code>adb connect ip</code>端口默认<code>5555</code></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-        <tag>adb</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HttpLogFilter拦截所有Http请求打印日志</title>
     <url>/JAVA/2020/2020100901/</url>
     <content><![CDATA[<p>JAVA使用HttpLogFilter拦截所有Http请求并打印日志</p>
@@ -90,26 +110,6 @@
       <tags>
         <tag>Spring</tag>
         <tag>Filter</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>@Mapper和@Repository的区别</title>
-    <url>/JAVA/2020/2020092701/</url>
-    <content><![CDATA[<p>JAVA中Dao层@Mapper和@Repository的区别</p>
-<a id="more"></a>
-
-<h1 id="Mapper"><a href="#Mapper" class="headerlink" title="@Mapper"></a>@Mapper</h1><p>@Mapper注解是mybatis的注解，是用来说明这个是一个Mapper，对应的xxxMapper.xml就是来实现这个Mapper。然后再server层使用@Autowired注解引用进来，会出现这样的情况，但是并不影响使用。 </p>
-<p>这是因为@Autowired是spring的注解，提示找不到相应的bean。如果有强迫症的同学，可以使用@Resource注解，因为这个是JDK的注解。</p>
-<h1 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h1><p>@Repository注解是Spring的注解，使用该注解和@Autowired注解，就不会出现爆红的情况了，原因很简单，因为@Repository注解是Sring的注解，把当前类注册成一个bean了。</p>
-<p>这里的@Mapper也是可以去掉的，但是要在启动类上加上<br>@MapperScan(value = {“{package_name}.*.mapper”})</p>
-<p>这句话的意思是扫描Mapper类。</p>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -170,6 +170,49 @@
       <tags>
         <tag>Gson</tag>
         <tag>FastJson</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WSL2 局域网访问以及固定 IP</title>
+    <url>/WSL2/2022/WSL2%E7%BD%91%E7%BB%9C%E7%AF%87/</url>
+    <content><![CDATA[<p>WSL 局域网访问以及固定 IP。</p>
+<a id="more"></a>
+
+<h1 id="1-WSL2-局域网访问以及固定-IP"><a href="#1-WSL2-局域网访问以及固定-IP" class="headerlink" title="1. WSL2 局域网访问以及固定 IP"></a>1. WSL2 局域网访问以及固定 IP</h1><h2 id="1-固定-IP"><a href="#1-固定-IP" class="headerlink" title="1. 固定 IP"></a>1. 固定 IP</h2><p>1、（不知道有没有用）首先登陆虚拟机（Ubuntu-20.04示例）创建 <a href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl-config">/etc/wsl.conf</a> ，写入以下内容，默认为true，true 将 WSL 设置为生成 /etc/resolv.conf</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[network]</span><br><span class="line">generateResolvConf=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>2、使用<code>管理员模式</code>执行<code>powershell</code>脚本更改 IP （尝试过开机自启但是没找到好的方法）</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">wsl <span class="literal">-d</span> Ubuntu<span class="literal">-20</span>.<span class="number">04</span> <span class="literal">-u</span> root ip addr <span class="built_in">del</span> <span class="variable">$</span>(ip addr show eth0 ^| grep <span class="string">&#x27;inet\b&#x27;</span> ^| awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> ^| head <span class="literal">-n</span> <span class="number">1</span>) dev eth0</span><br><span class="line">wsl <span class="literal">-d</span> Ubuntu<span class="literal">-20</span>.<span class="number">04</span> <span class="literal">-u</span> root ip addr add <span class="number">192.168</span>.<span class="number">50.2</span>/<span class="number">24</span> broadcast <span class="number">192.168</span>.<span class="number">50.255</span> dev eth0</span><br><span class="line">wsl <span class="literal">-d</span> Ubuntu<span class="literal">-20</span>.<span class="number">04</span> <span class="literal">-u</span> root ip route add <span class="number">0.0</span>.<span class="number">0.0</span>/<span class="number">0</span> via <span class="number">192.168</span>.<span class="number">50.1</span> dev eth0</span><br><span class="line">wsl <span class="literal">-d</span> Ubuntu<span class="literal">-20</span>.<span class="number">04</span> <span class="literal">-u</span> root <span class="built_in">echo</span> nameserver <span class="number">192.168</span>.<span class="number">50.1</span> ^&gt; /etc/resolv.conf</span><br><span class="line">powershell <span class="literal">-c</span> <span class="string">&quot;Get-NetAdapter &#x27;vEthernet (WSL)&#x27; | Get-NetIPAddress | Remove-NetIPAddress -Confirm:<span class="variable">$False</span>; New-NetIPAddress -IPAddress 192.168.50.1 -PrefixLength 24 -InterfaceAlias &#x27;vEthernet (WSL)&#x27;; Get-NetNat | ? Name -Eq WSLNat | Remove-NetNat -Confirm:<span class="variable">$False</span>; New-NetNat -Name WSLNat -InternalIPInterfaceAddressPrefix 192.168.50.0/24;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>成功后如图</p>
+<p>（Windows端）</p>
+<p><img src="WSL2%E7%BD%91%E7%BB%9C%E7%AF%87.assets/image-20220317182933894.png" alt="image-20220317182933894"></p>
+<p>（WSL端）</p>
+<p><img src="WSL2%E7%BD%91%E7%BB%9C%E7%AF%87.assets/image-20220318151307909.png" alt="image-20220318151307909"></p>
+<h2 id="2-端口转发（局域网访问）"><a href="#2-端口转发（局域网访问）" class="headerlink" title="2. 端口转发（局域网访问）"></a>2. 端口转发（局域网访问）</h2><h3 id="1-、Windows-转发端口"><a href="#1-、Windows-转发端口" class="headerlink" title="1 、Windows 转发端口"></a>1 、Windows 转发端口</h3><ol>
+<li><p>使用管理员模式启动 powershell</p>
+</li>
+<li><p>执行命令</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">netsh interface portproxy add v4tov4 listenport=<span class="number">8080</span> listenaddress=* connectport=<span class="number">8080</span> connectaddress=<span class="number">192.168</span>.<span class="number">50.2</span> protocol=tcp</span><br></pre></td></tr></table></figure>
+
+<p>命令表示将 Windows 的 8080 端口访问转发到 WSL（192.168.50.2） 的 8080 端口上。</p>
+</li>
+</ol>
+<p>删除命令</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#重置端口转发规则</span></span><br><span class="line">netsh interface portproxy reset</span><br><span class="line"><span class="comment">#删除指定端口转发规则</span></span><br><span class="line">netsh interface portproxy delete v4tov4 listenport=<span class="number">9400</span> protocol=tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、设置防火墙规则"><a href="#2、设置防火墙规则" class="headerlink" title="2、设置防火墙规则"></a>2、设置防火墙规则</h3><p>（不知道有没有用）打开<code>控制面板</code>中的防火墙，新增入站规则，将<code>C:\WINDOWS\System32\svchost.exe</code>程序设为允许</p>
+<h1 id="2-参考资料"><a href="#2-参考资料" class="headerlink" title="2. 参考资料"></a>2. 参考资料</h1><p><a href="https://bytem.io/posts/wsl2-network-tricks/">WSL2 的一些网络访问问题 | Artin’s Blog (bytem.io)</a>⭐</p>
+<p><a href="https://www.loyating.com/articles/23">wsl2固定IP解决方案 - 张子庭的博客 (loyating.com)</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/380779630">给 WSL2 设置静态 IP 地址 - 知乎 (zhihu.com)</a>⭐</p>
+]]></content>
+      <categories>
+        <category>WSL2</category>
+      </categories>
+      <tags>
+        <tag>WSL2</tag>
+        <tag>网络</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
 </search>
